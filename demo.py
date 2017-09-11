@@ -4,14 +4,15 @@ from pyramid.config import Configurator
 from pyramid.response import Response
 
 def hello_world(request):
-    return Response('Hello World!')
+    print(request.matchdict)
+    return Response('Hello World! %(name)s CHINA' % request.matchdict)
 
 if __name__ == '__main__':
     with Configurator() as config:
-        config.add_route('hello', '/')
+        config.include("pyramid_debugtoolbar")
+        config.add_route('hello', '/test/{name}')
         config.add_view(hello_world, route_name='hello')
         app = config.make_wsgi_app()
 
-    server = make_server('0.0.0.0', 6543, app)
-    print("start server")
+    server = make_server('0.0.0.0', 8080, app)
     server.serve_forever()
